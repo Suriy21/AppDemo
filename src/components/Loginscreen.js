@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
-import { SafeAreaView, Text, StyleSheet, Alert } from 'react-native';
+import {
+  SafeAreaView,
+  Text,
+  StyleSheet,
+  View,
+  TextInput,
+  Alert
+} from 'react-native';
 
-import CustomInput from './CustomInput';
-import CustomButton from './Button'; 
-import Loader from './Loader';
+import AnimatedButton from './AnimatedButton';
+import VectorIcon from './VectorIcon';
 
 export default function LoginScreen({ navigation }) {
   const [username, setUsername] = useState('');
@@ -11,49 +17,64 @@ export default function LoginScreen({ navigation }) {
   const [loading, setLoading] = useState(false);
 
   const handleLogin = () => {
-    // validation
     if (!username || !password) {
-      Alert.alert("Error", "Please enter username and password");
+      Alert.alert("Error", "Enter username & password");
       return;
     }
 
-    setLoading(true); 
+    setLoading(true);
 
-    // simulate API call
     setTimeout(() => {
-      setLoading(false); 
-
-      navigation.navigate('Welcome', { user: username });
-
-    }, 2000);
+      setLoading(false);
+      navigation.navigate("Welcome");
+    }, 1500);
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Login Screen</Text>
 
-      <CustomInput
-        label="Username"
-        value={username}
-        onChangeText={setUsername}
-      />
+      {/* 🔹 Card */}
+      <View style={styles.card}>
 
-      <CustomInput
-        label="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
+        {/* 🔹 Title */}
+        <View style={styles.titleContainer}>
+          <VectorIcon name="account-circle" size={50} color='#648294d0' />
+          <Text style={styles.title}>Login</Text>
+        </View>
 
-      {/* ✅ Custom Button */}
-      <CustomButton
-        title="Login"
-        onPress={handleLogin}
-        disabled={loading}
-      />
+        {/* 🔹 Username */}
+        <View style={styles.inputBox}>
+          <VectorIcon name="account" size={22} color="#777" />
+          <TextInput
+            placeholder="Username"
+            value={username}
+            onChangeText={setUsername}
+            style={styles.input}
+          />
+        </View>
 
-      {/* ✅ Loader */}
-      <Loader visible={loading} />
+        {/* 🔹 Password */}
+        <View style={styles.inputBox}>
+          <VectorIcon name="lock" size={22} color="#777" />
+          <TextInput
+            placeholder="Password"
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+            style={styles.input}
+          />
+        </View>
+
+        {/* 🔹 Button */}
+        <AnimatedButton
+          title="Login"
+          onPress={handleLogin}
+          loading={loading}
+        />
+    
+
+      </View>
+
     </SafeAreaView>
   );
 }
@@ -61,12 +82,41 @@ export default function LoginScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#eaeef1',
     justifyContent: 'center',
+    padding: 20
+  },
+
+  card: {
+    backgroundColor: '#f7f7f7',
     padding: 25,
+    borderRadius: 15,
+    elevation: 5, 
   },
+
+  titleContainer: {
+    alignItems: 'center',
+    marginBottom: 25
+  },
+
   title: {
-    fontSize: 30,
-    textAlign: 'center',
-    marginBottom: 20,
+    fontSize: 26,
+    fontWeight: 'bold',
+    marginTop: 10
   },
+
+  inputBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f1f3f6',
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    marginBottom: 15
+  },
+
+  input: {
+    flex: 1,
+    padding: 12,
+    fontSize: 16
+  }
 });

@@ -1,20 +1,31 @@
 import { useEffect } from 'react';
+
 export default function useAgeEligibility(dob, setAge, setIsEligible) {
   useEffect(() => {
 
+    // ✅ IMPORTANT: reset when no DOB
     if (!dob) {
-      setAge('default');     
-      setIsEligible(false);  
+      setAge('');
+      setIsEligible(false);
       return;
     }
+
     const today = new Date();
-    let calculatedAge = today.getFullYear() - dob.getFullYear();
-    const monthDiff = today.getMonth() - dob.getMonth();
-    const dayDiff = today.getDate() - dob.getDate();
-    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
-      calculatedAge--;
+    const birthDate = new Date(dob);
+
+    let years = today.getFullYear() - birthDate.getFullYear();
+
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birthDate.getDate())
+    ) {
+      years--;
     }
-    if (calculatedAge < 18) {
+
+    // ✅ SET VALUES PROPERLY
+    if (years < 18) {
       setAge('below18');
       setIsEligible(false);
     } else {
@@ -22,5 +33,5 @@ export default function useAgeEligibility(dob, setAge, setIsEligible) {
       setIsEligible(true);
     }
 
-  }, [dob]);
+  }, [dob]); // ✅ MUST depend on dob
 }

@@ -2,14 +2,22 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
-export default function Dropdown({ label, items = [], value, onValueChange }) {
+export default function Dropdown({
+  label,
+  items = [],
+  value,
+  onValueChange,
+  disabled = false
+}) {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
+
       <View style={styles.pickerContainer}>
         <Picker
           selectedValue={value}
           onValueChange={(itemValue) => onValueChange(itemValue)}
+          enabled={!disabled} // ✅ FIX
         >
           <Picker.Item label="Select..." value="" />
           {items.map((item, index) => (
@@ -23,7 +31,7 @@ export default function Dropdown({ label, items = [], value, onValueChange }) {
 
 const styles = StyleSheet.create({
   container: { marginBottom: 15 },
-  label: { fontSize: 20, fontWeight: '600', marginBottom: 5 },
+  label: { fontSize: 16, fontWeight: '600', marginBottom: 5 },
   pickerContainer: {
     borderWidth: 1,
     borderColor: '#166b9c',

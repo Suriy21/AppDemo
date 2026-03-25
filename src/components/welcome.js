@@ -1,18 +1,31 @@
 import React from 'react';
-import { SafeAreaView, Text, StyleSheet, Button } from 'react-native';
+import {
+  SafeAreaView,
+  Text,
+  StyleSheet,
+  View
+} from 'react-native';
 
-export default function Welcome({ navigation, route }) {
-  const username = route.params.user;
+import AnimatedButton from './AnimatedButton';
+
+export default function Welcome({ route, navigation }) {
+
+  const username = route?.params?.user || "Guest";
+
   return (
     <SafeAreaView style={styles.container}>
-      
-      <Text style={styles.text}>Welcome</Text>
-      <Text style={{color: 'black'}}>{username}</Text>
 
-      <Button
-        title=" Next"
-        onPress={() => navigation.navigate('Signup')}
-      />
+      <Text style={styles.text}>
+        Welcome {username} 🎉
+      </Text>
+
+      {/* 🔹 Go to Signup Button */}
+      <View style={{ marginTop: 30 }}>
+        <AnimatedButton
+          title="Next"
+          onPress={() => navigation.navigate("Signup")}
+        />
+      </View>
 
     </SafeAreaView>
   );
@@ -22,13 +35,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-    backgroundColor: '#e1e5ee'
+    alignItems: 'center'
   },
   text: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
+    fontSize: 24,
+    fontWeight: 'bold'
+  }
 });
