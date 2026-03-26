@@ -8,32 +8,49 @@ import {
   Alert
 } from 'react-native';
 
+
 import AnimatedButton from './AnimatedButton';
 import VectorIcon from './VectorIcon';
+import { getRandomUsers } from '../api/randomUserApi';
 
 export default function LoginScreen({ navigation }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = () => {
-    if (!username || !password) {
-      Alert.alert("Error", "Enter username & password");
-      return;
+  const handleLogin = async () => {
+    console.log("Username:", username);
+    console.log("Password:", password);
+
+    
+
+
+    try {
+      const users = await getRandomUsers(1);
+
+      if (users.length > 0) {
+        const user = users[0];
+
+        Alert.alert(
+          "Login Success",
+          `Welcome ${user.name.first} ${user.name.last}`
+        );
+
+        navigation.navigate("Welcome", { user });
+      } else {
+        Alert.alert("Error", "No user found");
+      }
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Error", "Failed to fetch user");
+    } finally {
+      setLoading(false); // ✅ always stop loader
     }
-
-    setLoading(true);
-
-    setTimeout(() => {
-      setLoading(false);
-      navigation.navigate("Welcome");
-    }, 1500);
   };
 
   return (
     <SafeAreaView style={styles.container}>
 
-      {/* 🔹 Card */}
       <View style={styles.card}>
 
         {/* 🔹 Title */}
@@ -48,7 +65,7 @@ export default function LoginScreen({ navigation }) {
           <TextInput
             placeholder="Username"
             value={username}
-            onChangeText={setUsername}
+            onChangeText={(text) => setUsername(text)} // ✅ FIXED
             style={styles.input}
           />
         </View>
@@ -60,7 +77,7 @@ export default function LoginScreen({ navigation }) {
             placeholder="Password"
             secureTextEntry
             value={password}
-            onChangeText={setPassword}
+            onChangeText={(text) => setPassword(text)} // ✅ FIXED
             style={styles.input}
           />
         </View>
@@ -71,7 +88,6 @@ export default function LoginScreen({ navigation }) {
           onPress={handleLogin}
           loading={loading}
         />
-    
 
       </View>
 
@@ -91,7 +107,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f7f7f7',
     padding: 25,
     borderRadius: 15,
-    elevation: 5, 
+    elevation: 5,
   },
 
   titleContainer: {
@@ -108,7 +124,7 @@ const styles = StyleSheet.create({
   inputBox: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#f1f3f6',
+    backgroundColor: '#ced5d89f',
     borderRadius: 10,
     paddingHorizontal: 10,
     marginBottom: 15
@@ -120,3 +136,68 @@ const styles = StyleSheet.create({
     fontSize: 16
   }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

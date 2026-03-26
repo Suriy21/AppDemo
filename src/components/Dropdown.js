@@ -15,9 +15,10 @@ export default function Dropdown({
 
       <View style={styles.pickerContainer}>
         <Picker
-          selectedValue={value}
-          onValueChange={(itemValue) => onValueChange(itemValue)}
-          enabled={!disabled} // ✅ FIX
+              selectedValue={value}
+              onValueChange={(itemValue) => onValueChange(itemValue)}
+              enabled={!disabled}
+              style={{ color: '#000' }}   // ✅ TEXT COLOR HERE
         >
           <Picker.Item label="Select..." value="" />
           {items.map((item, index) => (

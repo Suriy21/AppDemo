@@ -18,6 +18,7 @@ const CustomInput = ({
         onChangeText={onChangeText}
         secureTextEntry={secureTextEntry}
         placeholder={placeholder}
+        
       />
     </View>
   );
@@ -33,6 +34,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 10,
     fontSize:20,
+    color:'black',
+    
     width:'100%'
   },
 });

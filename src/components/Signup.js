@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   SafeAreaView,
   Text,
@@ -28,6 +28,27 @@ export default function SignupScreen({ navigation }) {
 
   useAgeEligibility(dob, setAge, setIsEligible);
 
+  // 🔥 Fetch Random User
+  const fetchRandomUser = () => {
+  fetch("https://randomuser.me/api/")
+    .then((res) => res.json())
+    .then((data) => {
+      const user = data.results[0];
+
+      // ✅ Prefill ONLY Name
+      setName(user.name.first + " " + user.name.last);
+
+      // ✅ Prefill ONLY Mobile
+      setMobile(user.phone);
+    })
+    .catch((err) => console.log(err));
+};
+
+  // 🔹 Auto-fill on screen load
+  useEffect(() => {
+    fetchRandomUser();
+  }, []);
+
   const handleSignup = () => {
     if (!name || !mobile || !maritalStatus || !age) {
       Alert.alert("Error", "Please fill all fields");
@@ -48,10 +69,9 @@ export default function SignupScreen({ navigation }) {
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
 
-       
-
-        {/* 🔹 Card */}
         <View style={styles.card}>
+
+          
 
           {/* Name */}
           <View style={styles.inputBox}>
@@ -69,7 +89,7 @@ export default function SignupScreen({ navigation }) {
             <CustomDatePicker value={dob} onChange={setDob} />
           </View>
 
-          {/* Marital */}
+          {/* Marital Status */}
           <View style={styles.inputBox}>
             <VectorIcon name="heart" size={22} color="#666" />
             <Dropdown
@@ -86,7 +106,6 @@ export default function SignupScreen({ navigation }) {
           {/* Age */}
           <View style={styles.inputBox}>
             <VectorIcon name="account-clock" size={22} color="#666" />
-
             <Text style={styles.ageText}>
               {age
                 ? age === 'above18'
@@ -113,7 +132,7 @@ export default function SignupScreen({ navigation }) {
             />
           </View>
 
-          {/* Button */}
+          {/* Signup Button */}
           <AnimatedButton
             title="Signup"
             onPress={handleSignup}
@@ -135,21 +154,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#eaf0f6'
   },
 
-  header: {
-    backgroundColor: '#4978a3',
-    padding: 25,
-    alignItems: 'center',
-    borderBottomLeftRadius: 25,
-    borderBottomRightRadius: 25
-  },
-
-  headerText: {
-    color: '#fff',
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginTop: 10
-  },
-
   card: {
     backgroundColor: '#fff',
     margin: 20,
@@ -161,7 +165,7 @@ const styles = StyleSheet.create({
   inputBox: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#f1f3f6',
+    backgroundColor: 'fff',
     borderRadius: 10,
     paddingHorizontal: 10,
     marginBottom: 15
@@ -177,7 +181,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 20,width:'100%'
+    marginBottom: 20,
+    width: '100%'
   },
 
   switchText: {

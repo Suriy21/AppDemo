@@ -33,5 +33,5 @@ export default function useAgeEligibility(dob, setAge, setIsEligible) {
       setIsEligible(true);
     }
 
-  }, [dob]); // ✅ MUST depend on dob
+  }, [dob]); 
 }
