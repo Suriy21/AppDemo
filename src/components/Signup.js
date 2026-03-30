@@ -30,25 +30,21 @@ export default function SignupScreen({ navigation }) {
 
   // 🔥 Fetch Random User
   const fetchRandomUser = () => {
-  fetch("https://randomuser.me/api/")
-    .then((res) => res.json())
-    .then((data) => {
-      const user = data.results[0];
+    fetch("https://randomuser.me/api/")
+      .then((res) => res.json())
+      .then((data) => {
+        const user = data.results[0];
+        setName(user.name.first + " " + user.name.last);
+        setMobile(user.phone);
+      })
+      .catch((err) => console.log(err));
+  };
 
-      // ✅ Prefill ONLY Name
-      setName(user.name.first + " " + user.name.last);
-
-      // ✅ Prefill ONLY Mobile
-      setMobile(user.phone);
-    })
-    .catch((err) => console.log(err));
-};
-
-  // 🔹 Auto-fill on screen load
   useEffect(() => {
     fetchRandomUser();
   }, []);
 
+  // ✅ FINAL SIGNUP FUNCTION
   const handleSignup = () => {
     if (!name || !mobile || !maritalStatus || !age) {
       Alert.alert("Error", "Please fill all fields");
@@ -59,9 +55,16 @@ export default function SignupScreen({ navigation }) {
 
     setTimeout(() => {
       setLoading(false);
-      Alert.alert("Success", "Signup Successfully!", [
-        { text: "OK", onPress: () => navigation.navigate("Login") },
-      ]);
+
+      // 🔥 Navigate to Dashboard with data
+      navigation.replace("Dashboard", {
+        user: {
+          name,
+          mobile,
+          age
+        }
+      });
+
     }, 1500);
   };
 
@@ -70,8 +73,6 @@ export default function SignupScreen({ navigation }) {
       <ScrollView showsVerticalScrollIndicator={false}>
 
         <View style={styles.card}>
-
-          
 
           {/* Name */}
           <View style={styles.inputBox}>
@@ -153,7 +154,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#eaf0f6'
   },
-
   card: {
     backgroundColor: '#fff',
     margin: 20,
@@ -161,30 +161,25 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     elevation: 5
   },
-
   inputBox: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'fff',
+    backgroundColor: '#fff',
     borderRadius: 10,
     paddingHorizontal: 10,
     marginBottom: 15
   },
-
   ageText: {
     fontSize: 16,
     padding: 12,
     color: '#333'
   },
-
   switchRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 20,
-    width: '100%'
+    marginBottom: 20
   },
-
   switchText: {
     flex: 1,
     marginLeft: 10,
